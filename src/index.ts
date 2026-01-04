@@ -7,6 +7,8 @@ import { AutoValidate } from "./decorators";
 import { mergeObjects } from "./functions";
 import { splitByDots } from "./functions";
 
+import { logger } from "./logs";
+
 export {
   AppError,
   IsValidPhone,
@@ -14,4 +16,5 @@ export {
   AutoValidate,
   mergeObjects,
   splitByDots,
+  logger,
 };

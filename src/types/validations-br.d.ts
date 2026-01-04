@@ -3,3 +3,4 @@ declare module 'validations-br' {
   export function validateCep(cep: string): boolean;
 }
 
+
