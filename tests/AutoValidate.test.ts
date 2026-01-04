@@ -38,7 +38,7 @@ describe("AutoValidate", () => {
       expect(error).toBeInstanceOf(AppError);
       if (error instanceof AppError) {
         expect(error.statusCode).toBe(400);
-        expect(error.message).toBe("Fail when validate");
+        expect(error.message).toBe("Fail when validate the class ValidatedClass");
         expect(error.errors).toBeDefined();
         expect(error.errors?.length).toBeGreaterThan(0);
       }
