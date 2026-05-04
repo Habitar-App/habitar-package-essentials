@@ -1,4 +1,4 @@
-import { registerDecorator, ValidationOptions, ValidationArguments } from 'class-validator';
+import { registerDecorator, ValidationOptions } from 'class-validator';
 import { validateCep } from 'validations-br';
 
 export function IsValidZipCode(validationOptions?: ValidationOptions) {
@@ -9,7 +9,7 @@ export function IsValidZipCode(validationOptions?: ValidationOptions) {
       propertyName: propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any) {
           return validateCep(value);
         },
       },
