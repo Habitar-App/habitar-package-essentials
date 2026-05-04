@@ -6,9 +6,14 @@ import { AutoValidate } from "./decorators";
 
 import { mergeObjects } from "./functions";
 import { splitByDots } from "./functions";
+import { extractError } from "./functions";
+import { redactAuthHeader } from "./functions";
+import { redactSensitiveHeaders } from "./functions";
+import type { ExtractedError } from "./functions";
 
 import { logger } from "./logs";
 
+export type { ExtractedError };
 export {
   AppError,
   IsValidPhone,
@@ -16,5 +21,8 @@ export {
   AutoValidate,
   mergeObjects,
   splitByDots,
+  extractError,
+  redactAuthHeader,
+  redactSensitiveHeaders,
   logger,
 };
