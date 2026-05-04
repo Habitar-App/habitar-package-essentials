@@ -1,4 +1,4 @@
-import { registerDecorator, ValidationOptions, ValidationArguments } from 'class-validator';
+import { registerDecorator, ValidationOptions } from 'class-validator';
 import { validatePhone } from 'validations-br';
 
 export function IsValidPhone(validationOptions?: ValidationOptions) {
@@ -9,7 +9,7 @@ export function IsValidPhone(validationOptions?: ValidationOptions) {
       propertyName: propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any) {
           return validatePhone(value);
         },
       },
