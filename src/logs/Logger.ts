@@ -19,19 +19,29 @@ const prettyStream = pinoPretty({
   hideObject: true,
 });
 
-const streamToElastic = pinoElasticsearch({
-  index: `logs-${process.env.SERVICE_NAME}`,
-  node: process.env.ELASTICSEARCH_URL,
-  esVersion: 8,
-  flushBytes: 1000,
-  flushInterval: 30000,
-  Connection: HttpConnection as any,
-  opType: "create",
-});
+const streams = [
+  { stream: prettyStream },
+];
+if(!process.env.ELASTICSEARCH_URL) {
+  const streamToElastic = pinoElasticsearch({
+    index: `logs-${process.env.SERVICE_NAME}`,
+    node: process.env.ELASTICSEARCH_URL,
+    auth: {
+      username: `${process.env.ELASTICSEARCH_USERNAME}`,
+      password: `${process.env.ELASTICSEARCH_PASSWORD}`,
+    },
+    esVersion: 8,
+    flushBytes: 1000,
+    flushInterval: 30000,
+    Connection: HttpConnection as any,
+    opType: "create",
+  });
+  streams.push({ stream: streamToElastic });
+}
 
 const logger = pino(
   baseConfig,
-  pino.multistream([{ stream: streamToElastic }, { stream: prettyStream }])
+  pino.multistream(streams)
 );
 
 export { logger };
