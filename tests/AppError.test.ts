@@ -41,9 +41,28 @@ describe("AppError", () => {
 
   it("deve herdar corretamente de Error", () => {
     const error = new AppError("Teste");
-    
+
     expect(error.name).toBe("Error");
     expect(error.stack).toBeDefined();
+  });
+
+  it("deve criar uma instância de AppError com code discriminador", () => {
+    const error = new AppError(
+      "Janela de 24h expirada. Aguarde o cliente responder.",
+      422,
+      undefined,
+      "WHATSAPP_WINDOW_EXPIRED",
+    );
+
+    expect(error.statusCode).toBe(422);
+    expect(error.code).toBe("WHATSAPP_WINDOW_EXPIRED");
+    expect(error.errors).toBeUndefined();
+  });
+
+  it("deve manter code undefined quando não fornecido", () => {
+    const error = new AppError("Sem code");
+
+    expect(error.code).toBeUndefined();
   });
 });
 
