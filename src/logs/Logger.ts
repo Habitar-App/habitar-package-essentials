@@ -1,10 +1,13 @@
-import { HttpConnection } from "@elastic/elasticsearch";
-import pino from "pino";
-import pinoElasticsearch from "pino-elasticsearch";
-import pinoPretty from "pino-pretty";
+import pino, { LoggerOptions } from "pino";
 
-const baseConfig = {
-  level: (process.env.LOG_LEVEL as any) || "info",
+type TransportTarget = {
+  target: string;
+  level?: pino.LevelWithSilent;
+  options?: Record<string, unknown>;
+};
+
+const baseConfig: LoggerOptions = {
+  level: (process.env.LOG_LEVEL as pino.LevelWithSilent) || "info",
   timestamp: pino.stdTimeFunctions.isoTime,
   base: {
     service: process.env.SERVICE_NAME,
@@ -12,36 +15,35 @@ const baseConfig = {
   },
 };
 
-const prettyStream = pinoPretty({
-  colorize: true,
-  translateTime: "SYS:standard",
-  ignore: "pid,hostname",
-  hideObject: true,
-});
-
-const streams = [
-  { stream: prettyStream },
-];
-if(!process.env.ELASTICSEARCH_URL) {
-  const streamToElastic = pinoElasticsearch({
-    index: `logs-${process.env.SERVICE_NAME}`,
-    node: process.env.ELASTICSEARCH_URL,
-    auth: {
-      username: `${process.env.ELASTICSEARCH_USERNAME}`,
-      password: `${process.env.ELASTICSEARCH_PASSWORD}`,
+const targets: TransportTarget[] = [
+  {
+    target: "pino-pretty",
+    options: {
+      colorize: true,
+      translateTime: "SYS:standard",
+      ignore: "pid,hostname",
+      singleLine: true,
     },
-    esVersion: 8,
-    flushBytes: 1000,
-    flushInterval: 30000,
-    Connection: HttpConnection as any,
-    opType: "create",
+  },
+];
+
+if (process.env.LOGTAIL_SOURCE_TOKEN) {
+  targets.push({
+    target: "@logtail/pino",
+    options: {
+      sourceToken: process.env.LOGTAIL_SOURCE_TOKEN,
+      options: {
+        endpoint:
+          process.env.LOGTAIL_INGESTING_HOST ||
+          "https://in.logs.betterstack.com",
+      },
+    },
   });
-  streams.push({ stream: streamToElastic });
 }
 
-const logger = pino(
-  baseConfig,
-  pino.multistream(streams)
-);
+const logger = pino({
+  ...baseConfig,
+  transport: { targets },
+});
 
 export { logger };
