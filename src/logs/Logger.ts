@@ -15,8 +15,9 @@ const baseConfig: LoggerOptions = {
   },
 };
 
-const targets: TransportTarget[] = [
-  {
+const targets: TransportTarget[] = [];
+if(process.env.NODE_ENV !== 'production'){
+  targets.push({
     target: "pino-pretty",
     options: {
       colorize: true,
@@ -24,8 +25,8 @@ const targets: TransportTarget[] = [
       ignore: "pid,hostname",
       singleLine: true,
     },
-  },
-];
+  });
+}
 
 if (process.env.LOGTAIL_SOURCE_TOKEN) {
   targets.push({
