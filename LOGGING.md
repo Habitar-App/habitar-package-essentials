@@ -6,7 +6,7 @@ Este pacote expõe o `logger` (pino) usado pelos serviços do Habitar. Toda a st
 
 - **Engine**: [pino](https://github.com/pinojs/pino)
 - **Pretty (stdout)**: `pino-pretty` (sempre habilitado)
-- **Transporte remoto**: `@logtail/pino` (Better Stack / Logtail). Substituiu `pino-elasticsearch` — o Elastic perdia logs importantes.
+- **Transporte remoto**: `@logtail/pino` (Better Stack / Logtail).
 
 ## Variáveis de ambiente
 
