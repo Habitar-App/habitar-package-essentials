@@ -1,3 +1,5 @@
+> ⚠️ **ARQUIVADO.** Este serviço foi absorvido por `@argentotech/essentials`. Veja `ARQUIVADO.md`.
+
 # @habitar/essentials
 
 To install dependencies:
